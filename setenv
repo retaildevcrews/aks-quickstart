@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# this needs to be a unique DNS name
+# DNS rules apply - all lower case, start end with character; character, numeric and - only
+export ACR_NAME={{acr_name}}
+
+# Change these if desired
+export AKSRG=aks
+export ACRRG=acr
+export AKS_SP=aks
+export ACR_SP=${ACR_NAME}-acr
+export AKSNAME=aks
+export AKSLOC=centralus
+export AKSSIZE=Standard_D2s_v3
+
+# Don't change this
+export MCRG=MC_${AKSRG}_${AKSNAME}_${AKSLOC}
+
+# Read the App ID  if it exists
+if [ -f ~/.ssh/aks_app_id ]; then
+	export AKS_APP_ID=$(cat ~/.ssh/aks_app_id)
+fi
+
+# Read the AKS SP password if it exists
+if [ -f ~/.ssh/aks_pwd ]; then
+	export AKS_PWD=$(cat ~/.ssh/aks_pwd)
+fi
+
+# Read the ACR SP password if it exists
+if [ -f ~/.ssh/acr_pwd ]; then
+	export ACR_PWD=$(cat ~/.ssh/acr_pwd)
+fi
+
+# setup an alias (optional)
+alias k=kubectl

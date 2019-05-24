@@ -1,0 +1,34 @@
+#!/bin/bash
+
+mkdir -p ~/.ssh
+
+# source the environment variables
+. ~/setenv
+
+# create Docker build VM
+# use ssh key if exist
+# use password otherwise
+if [ -f ~/.ssh/id_rsa ]; then
+    az vm create \
+    --size standard_d2s_v3 \
+    --nsg-rule SSH \
+    --image Canonical:UbuntuServer:18.04-LTS:latest \
+    -g $ACRRG \
+    -n docker \
+    --admin-username aks \
+    --custom-data docker/startup.sh
+else 
+    az vm create  \
+    --size standard_d2s_v3 \
+    --nsg-rule SSH \
+    --image Canonical:UbuntuServer:18.04-LTS:latest \
+    -g $ACRRG \
+    -n docker \
+    --admin-username aks --admin-password=Kubernetes-k8s \
+    --custom-data docker/startup.sh \
+    --generate-ssh-keys
+fi
+
+export DHOST=aks@`az network public-ip show -g $ACRRG -n dockerPublicIP --query [ipAddress] -o tsv`
+echo " "
+echo $DHOST

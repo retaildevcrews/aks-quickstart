@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-gw
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: app-gw
+  template:
+    metadata:
+      labels:
+        app: app-gw
+    spec:
+      containers:
+      - name: app-gw
+        image: fourco/govote
+        resources:
+          requests:
+            cpu: 250m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
+        ports:
+        - containerPort: 8080
+        livenessProbe:
+          exec:
+            command:
+              - cat
+              - /root/app/logs/app.log
+          initialDelaySeconds: 60
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /healthcheck
+            port: 8080
+          initialDelaySeconds: 300
+          periodSeconds: 5
+        env:
+        - name: MY_NODE_NAME
+          valueFrom:
+            fieldRef:
+                fieldPath: spec.nodeName
+        - name: MY_POD_NAME
+          valueFrom:
+            fieldRef:
+                fieldPath: metadata.name

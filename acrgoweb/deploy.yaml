@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: acrgoweb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: acrgoweb
+  template:
+    metadata:
+      labels:
+        app: acrgoweb
+    spec:
+      imagePullSecrets:
+      - name: fourco-reader
+      containers:
+      - name: acrgoweb
+        image: fourco.azurecr.io/acrgoweb
+        resources:
+          requests:
+            cpu: 250m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
+        ports:
+          - containerPort: 8080
+        livenessProbe:
+          exec:
+            command:
+              - cat
+              - /root/app/logs/app.log
+          initialDelaySeconds: 60
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /healthcheck
+            port: 8080
+          initialDelaySeconds: 300
+          periodSeconds: 5
+        env:
+        - name: MY_NODE_NAME
+          valueFrom:
+            fieldRef:
+                fieldPath: spec.nodeName
+        - name: MY_NODE_IP
+          valueFrom:
+            fieldRef:
+                fieldPath: status.hostIP
+        - name: MY_POD_NAME
+          valueFrom:
+            fieldRef:
+                fieldPath: metadata.name
+        - name: MY_POD_IP
+          valueFrom:
+            fieldRef:
+                fieldPath: status.podIP
