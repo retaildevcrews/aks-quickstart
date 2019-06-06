@@ -210,12 +210,17 @@ az aks create -g $AKSRG \
 -n $AKSNAME \
 -c 3 \
 -s $AKSSIZE \
---kubernetes-version 1.12.6 \
+--kubernetes-version 1.12.8 \
 --no-ssh-key \
 --service-principal $AKS_APP_ID \
 --client-secret $AKS_PWD
 
 # this will take a while
+
+# If the az aks create command fails due to the parameter orchestratorProfile.OrchestratorVersion value being invalid,
+# run the following command to make sure the kubernetes version is supported.
+# If the version used in the original call is not in the table, rerun the command with a version in the first column.
+az aks get-versions -l centralus -o table
 
 ```
 
