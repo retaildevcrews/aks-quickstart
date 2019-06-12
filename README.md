@@ -131,7 +131,6 @@ az group create -n $ACRRG --location $AKSLOC
 ### Create a Docker build server
 
 #### Note
-If you're comfortable with SSH keys (the proper way to setup SSH), you can remove the following from setup (2 locations):  --admin-password=Kubernetes-k8s 
 
 The script will use the id_rsa and id_rsa.pub keys in ~/.ssh. If they don't exist, they will be created.
 
@@ -147,6 +146,29 @@ The script will use the id_rsa and id_rsa.pub keys in ~/.ssh. If they don't exis
 ### Docker overview slides
 
 A quick Docker introduction while our Build Server deploys
+
+### Copy your ssh keys
+
+You will need to copy the id_rsa and id_rsa.pub files from ~/.ssh to your local machine.
+
+```
+
+# In a Windows Command Prompt
+md %USERPROFILE%/.ssh
+cd %USERPROFILE%/.ssh
+
+# In Azure Cloud Shell
+# Copy the key
+cat ~/.ssh/id_rsa
+
+# In Windows command prompt
+notepad id_rsa.
+# Paste the key
+# Save and exit
+
+# Repeat for id_rsa.pub
+
+```
 
 ### ssh into the build server
 
@@ -165,10 +187,6 @@ Open a command prompt or terminal window and enter the following command substit
 Note that if SSH is blocked by your firewall, you can continue to use Azure Cloud Shell. We use the native SSH client because cutting and pasting text is easier.
 
 ssh aks@xxx.xxx.xxx.xxx
-
-When prompted for a password enter Kubernetes-k8s
-
-(note that this is NOT a secure VM and you should always use private keys instead of passwords)
 
 Your prompt should look like this:
 
@@ -205,22 +223,23 @@ export AKS_APP_ID=$(az ad sp show --id http://$AKS_SP --query appId --output tsv
 echo $AKS_PWD > ~/.ssh/aks_pwd
 echo $AKS_APP_ID > ~/.ssh/aks_app_id
 
+# Get the latest AKS version number
+az aks get-versions -l centralus -o table
+
+# Replace 1.13.5 if desired
+
 # create AKS cluster
 az aks create -g $AKSRG \
 -n $AKSNAME \
 -c 3 \
 -s $AKSSIZE \
---kubernetes-version 1.12.8 \
+--kubernetes-version 1.13.5 \
 --no-ssh-key \
 --service-principal $AKS_APP_ID \
 --client-secret $AKS_PWD
 
 # this will take a while
 
-# If the az aks create command fails due to the parameter orchestratorProfile.OrchestratorVersion value being invalid,
-# run the following command to make sure the kubernetes version is supported.
-# If the version used in the original call is not in the table, rerun the command with a version in the first column.
-az aks get-versions -l centralus -o table
 
 ```
 
