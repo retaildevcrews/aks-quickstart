@@ -8,9 +8,9 @@ usermod -aG docker aks
 
 # install some stuff
 apt-get update
-apt-get install -y apt-transport-https ca-certificates curl git wget nano lsb-release software-properties-common jq redis-tools
+apt-get install -y apt-transport-https ca-certificates curl git wget nano lsb-release software-properties-common jq redis-tools gnupg-agent
 
-git clone https://github.com/4-co/aks-quickstart /home/aks/aks
+git clone https://github.com/fourco/aks-quickstart /home/aks/aks
 
 chown -R aks:aks /home/aks
 
@@ -26,9 +26,11 @@ apt-key adv --keyserver packages.microsoft.com --recv-keys 52E16F86FEE04B979B07E
 echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-bionic-prod bionic main" > /etc/apt/sources.list.d/dotnetdev.list
 
 # add Azure CLI repo
-AZ_REPO=$(lsb_release -cs)
-echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" > /etc/apt/sources.list.d/azure-cli.list
-apt-key --keyring /etc/apt/trusted.gpg.d/Microsoft.gpg adv --keyserver packages.microsoft.com --recv-keys BC528686B50D79E339D3721CEB3E94ADBE1229CF
+set -v
+curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/microsoft.asc.gpg
+CLI_REPO=$(lsb_release -cs)
+echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ ${CLI_REPO} main" > /etc/apt/sources.list.d/azure-cli.list
+set +v
 
 #add kubectl repo
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
@@ -37,14 +39,14 @@ echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" > /etc/apt/sources.
 echo "installing ..." > /home/aks/status
 
 apt-get update
-apt-get install -y azure-cli docker-ce kubectl
+apt-get install -y azure-cli
+apt-get install -y docker-ce docker-ce-cli containerd.io kubectl
 
 # apt-get install -y golang-go
 # apt-get install -y dotnet-sdk-2.2
 
-#apt-get upgrade -y
-
-#apt-get dist-upgrade -y
+apt-get upgrade -y
+apt-get dist-upgrade -y
 
 #shutdown -r now
 
@@ -57,7 +59,5 @@ echo "ready" > /home/aks/status
 # pull the docker images
 docker pull ubuntu
 docker pull fourco/go-web-aks
-docker pull golang
-docker pull mariadb
 docker pull fourco/govote
 docker pull redis
