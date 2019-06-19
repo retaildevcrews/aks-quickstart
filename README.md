@@ -127,12 +127,38 @@ az group create --name $AKSRG --location $AKSLOC
 az group create -n $ACRRG --location $AKSLOC
 
 ```
+### Generate ssh keys and upload to Azure Cloud Shell
+
+Open a command prompt on your local machine to generate the id_rsa and id_rsa.pub keys.
+
+```
+cd ~
+
+# Create a .ssh folder (if it doesnt already exist)
+mkdir .ssh
+cd .ssh
+
+# Generate the keys
+ssh-keygen -t rsa -f ~/.ssh/id_rsa -N ''
+
+```
+Go back to your browser with Azure Cloud Shell.
+
+Click on the "Upload/Download files" button and select the newly generated id_rsa and id_rsa.pub.
+<br>(You will have to do this once per file)
+
+![Upload files to Azure Cloud Shell](images/azure-cloud-shell-upload.png)
+
+```
+# In Azure Cloud Shell, you should see your uploaded keys in the home dir.
+cd ~
+ls
+
+# Move the keys to the .ssh folder
+mv id_rsa id_rsa.pub .ssh/
+```
 
 ### Create a Docker build server
-
-#### Note
-
-The script will use the id_rsa and id_rsa.pub keys in ~/.ssh. If they don't exist, they will be created.
 
 ```
 
