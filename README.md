@@ -139,7 +139,8 @@ mkdir .ssh
 cd .ssh
 
 # Generate the keys
-ssh-keygen -t rsa -f ~/.ssh/id_rsa -N ''
+# Hit enter twice to set an empty passphrase
+ssh-keygen -t rsa -f ./id_rsa
 
 ```
 Go back to your browser with Azure Cloud Shell.
