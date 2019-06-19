@@ -173,29 +173,6 @@ mv id_rsa id_rsa.pub .ssh/
 
 A quick Docker introduction while our Build Server deploys
 
-### Copy your ssh keys
-
-You will need to copy the id_rsa and id_rsa.pub files from ~/.ssh to your local machine.
-
-```
-
-# In a Windows Command Prompt
-md %USERPROFILE%/.ssh
-cd %USERPROFILE%/.ssh
-
-# In Azure Cloud Shell
-# Copy the key
-cat ~/.ssh/id_rsa
-
-# In Windows command prompt
-notepad id_rsa.
-# Paste the key
-# Save and exit
-
-# Repeat for id_rsa.pub
-
-```
-
 ### ssh into the build server
 
 Get the address of the build server (it should be displayed in the Azure Cloud Shell window)
