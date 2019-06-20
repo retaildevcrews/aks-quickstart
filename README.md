@@ -157,6 +157,10 @@ ls
 
 # Move the keys to the .ssh folder
 mv id_rsa id_rsa.pub .ssh/
+
+# Set the right (owner read+write) permissions for the keys
+chmod 600 ~/.ssh/id_rsa.pub
+chmod 600 ~/.ssh/id_rsa
 ```
 
 ### Create a Docker build server
