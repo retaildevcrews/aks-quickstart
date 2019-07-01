@@ -32,17 +32,17 @@ CLI_REPO=$(lsb_release -cs)
 echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ ${CLI_REPO} main" > /etc/apt/sources.list.d/azure-cli.list
 set +v
 
-# install docker compose
-curl -sSL https://github.com/docker/compose/releases/download/`curl -s https://github.com/docker/compose/tags | \
-grep "compose/releases/tag" | sed -r 's|.*([0-9]+\.[0-9]+\.[0-9]+).*|\1|p' | head -n 1`/docker-compose-`uname -s`-`uname -m` \
--o /usr/local/bin/docker-compose
-chmod +x /usr/local/bin/docker-compose
-
 # add kubectl repo
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" > /etc/apt/sources.list.d/kubernetes.list
 
 echo "installing ..." > /home/aks/status
+
+# install latest version of docker compose
+curl -sSL https://github.com/docker/compose/releases/download/`curl -s https://github.com/docker/compose/tags | \
+grep "compose/releases/tag" | sed -r 's|.*([0-9]+\.[0-9]+\.[0-9]+).*|\1|p' | head -n 1`/docker-compose-`uname -s`-`uname -m` \
+-o /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
 
 apt-get update
 apt-get install -y azure-cli
