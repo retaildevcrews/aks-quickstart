@@ -1,6 +1,10 @@
 # Docker Walk Through
 ### 100 level
 
+### Additional Docker Resource Links
+* Intro to Docker Best Practices: <https://blog.docker.com/2019/07/intro-guide-to-dockerfile-best-practices/>
+* Dockerfile Linter: <https://github.com/hadolint/hadolint>
+
 ### Setup
 
 If you haven't already, clone the repo and run setup as explained in the [readme](README.md)
