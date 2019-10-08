@@ -234,14 +234,14 @@ echo $AKS_APP_ID > ~/.ssh/aks_app_id
 # Get the latest AKS version number
 az aks get-versions -l centralus -o table
 
-# Replace 1.13.5 if desired
+# Replace 1.15.3 if desired
 
 # create AKS cluster
 az aks create -g $AKSRG \
 -n $AKSNAME \
 -c 3 \
 -s $AKSSIZE \
---kubernetes-version 1.13.5 \
+--kubernetes-version 1.15.3 \
 --no-ssh-key \
 --service-principal $AKS_APP_ID \
 --client-secret $AKS_PWD
