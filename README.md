@@ -166,6 +166,8 @@ chmod 600 ~/.ssh/id_rsa
 ### Create a Docker build server
 
 ```
+# Set the executable permission on the setup script
+chmod +x setup
 
 # this takes a while
 ./setup
